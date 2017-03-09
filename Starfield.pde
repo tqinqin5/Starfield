@@ -3,7 +3,7 @@ Nebula[] web;
 int dimx = 800, dimy = 600;
 void setup(){
    noStroke();
-   particles = new particle[100];
+   particles = new particle[200];
    web = new Nebula[5000];
    size(800, 600);
    background(0);
@@ -17,9 +17,12 @@ void setup(){
    particles[1] = new JumboParticle();
 }
 void draw(){
+  fill(0,0,0,33);
+  if(mousePressed == false)
   background(0);
-  fill(255);
-  ellipse(dimx/2,dimy/2,20,20);
+  else
+  rect(0,0,dimx,dimy);
+  
   for(int i = 0; i < particles.length; i++){
     particles[i].move();
     particles[i].show();
@@ -35,9 +38,9 @@ class NormalParticle implements particle{
   int r, g, b, size;
   NormalParticle(){
     r = (int)(Math.random() * 255);
-    g = (int)(Math.random() * 80);
+    g = (int)(Math.random() * 160);
     b = 255-r;
-    v = Math.random()*10 + 3;
+    v = Math.random()*7 + 3;
     theta = Math.random()*2*Math.PI;
     x = dimx/2;
     y = dimy/2;
@@ -47,13 +50,19 @@ class NormalParticle implements particle{
     x += v*Math.cos(theta);
     y += v*Math.sin(theta);
     if(x > dimx || y > dimy || x < 0 || y < 0){
-    x = dimx/2;
-    y = dimy/2;
+    x = mouseX;
+    y = mouseY;
     }
   }
   public void show(){
     fill(r,g,b);
-    ellipse((float)(x),(float)(y), size, size);
+    ellipse((float)x,(float)y, size/2, size/2);
+    fill(r,g,b,50);
+    ellipse((float)x,(float)y, size, size);
+    fill(255,255,255,20);
+    ellipse((float)x,(float)y, size*2, size*2);
+    fill(255,255,255,10);
+    ellipse((float)x,(float)y, size*3, size*3);
   }
   
 }
@@ -81,9 +90,7 @@ class OddBallParticle implements particle{
     dy = mouseY - y;
 
       vx += Math.signum(dx); //velocity is increased if dx is positive, decreased if negative
-      vy += Math.signum(dy); 
-
-
+      vy += Math.signum(dy);
       while(vx>10){
         vx -= 1;
       }
@@ -96,9 +103,8 @@ class OddBallParticle implements particle{
       while(vy<-10){
         vy += 1;
       }
-      
-    x += vx + (int)(Math.random()*9)-4; //x is increased by velocity
-    y += vy + (int)(Math.random()*9)-4;
+    x += vx;
+    y += vy;
   }
 }
 
@@ -132,13 +138,21 @@ public interface particle{
 
 class Nebula{
   double x, y;
-  int r, g, b;
+  int r, g, b, size;
   Nebula(){
-    r = 150 + (int)(Math.random()*105);
-    g = (int)(Math.random()*20);
-    b = 150 + (int)(Math.random()*105);
+    if(Math.random() < .5){
+      r = 150 + (int)(Math.random()*105);
+      g = (int)(Math.random()*20);
+      b = 15 + (int)(Math.random()*105);
+    }
+    else{
+      r = 100 + (int)(Math.random()*155);
+      g = 40 + (int)(Math.random()*25);
+      b = (int)(Math.random()*18);
+    }
     x = Math.random()*dimx;
     y = Math.random()*dimy;
+    size = 3 + (int)(Math.random()*3);
   }
   void move(){
     x += Math.random()*2 - 1;
@@ -150,6 +164,6 @@ class Nebula{
   }
   void show(){
     fill(r, g, b, 80);
-    ellipse((float)x, (float)y, 2, 2);
+    ellipse((float)x, (float)y, size, size);
   }
 }
