@@ -3,8 +3,8 @@ Nebula[] web;
 int dimx = 800, dimy = 600;
 void setup(){
    noStroke();
-   particles = new particle[200];
-   web = new Nebula[5000];
+   particles = new particle[20];
+   web = new Nebula[500];
    size(800, 600);
    background(0);
    for(int i = 0; i < particles.length; i++){
